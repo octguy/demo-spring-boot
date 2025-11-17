@@ -104,19 +104,13 @@ demo-spring-boot/
 
 ### Quick Start with Docker Compose
 
-1. **Navigate to the project directory**
-
-   ```bash
-   cd /Users/octguy/Personalize/tech/java/project/demo-spring-boot
-   ```
-
-2. **Build and run with Docker Compose**
+1. **Build and run with Docker Compose**
 
    ```bash
    docker-compose up -d
    ```
 
-3. **Access the application**
+2. **Access the application**
 
    - Main Application: http://localhost:8080
    - H2 Console: http://localhost:8080/h2-console
@@ -124,7 +118,7 @@ demo-spring-boot/
      - Username: `sa`
      - Password: (leave empty)
 
-4. **View logs**
+3. **View logs**
 
    ```bash
    docker-compose logs -f student-management-app
