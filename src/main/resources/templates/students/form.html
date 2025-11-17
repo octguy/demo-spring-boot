@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title
+      th:text="${student.id != null ? 'Edit Student' : 'Add Student'} + ' - Student Management System'"
+    >
+      Student Form - Student Management System
+    </title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      .content {
+        flex: 1;
+      }
+      .navbar-brand {
+        font-weight: bold;
+      }
+      footer {
+        background-color: #f8f9fa;
+        padding: 20px 0;
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/students">
+          <i class="bi bi-mortarboard-fill"></i> Student Management System
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/students">
+                <i class="bi bi-list-ul"></i> Students
+              </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+              <a class="nav-link active" href="/students/new">
+                <i class="bi bi-plus-circle"></i> Add Student
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <i class="bi bi-person-circle"></i>
+                <span th:text="${username}">User</span>
+                <span
+                  class="badge bg-light text-dark"
+                  sec:authorize="hasRole('ADMIN')"
+                  >ADMIN</span
+                >
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="dropdown-item">
+                      <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="container mt-4">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2>
+                <i
+                  th:class="${student.id != null ? 'bi bi-pencil-square' : 'bi bi-plus-circle'}"
+                ></i>
+                <span
+                  th:text="${student.id != null ? 'Edit Student' : 'Add New Student'}"
+                  >Add New Student</span
+                >
+              </h2>
+              <a th:href="@{/students}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+              </a>
+            </div>
+
+            <!-- Error Messages -->
+            <div
+              th:if="${errorMessage}"
+              class="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <span th:text="${errorMessage}"></span>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+              ></button>
+            </div>
+
+            <!-- Student Form -->
+            <div class="card">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                  <i class="bi bi-person-fill"></i> Student Information
+                </h5>
+              </div>
+              <div class="card-body">
+                <form
+                  th:action="${student.id != null ? '/students/' + student.id : '/students'}"
+                  th:object="${student}"
+                  method="post"
+                >
+                  <!-- Name -->
+                  <div class="mb-3">
+                    <label for="name" class="form-label">
+                      <i class="bi bi-person"></i> Name
+                      <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                      id="name"
+                      th:field="*{name}"
+                      placeholder="Enter student name (2-100 characters)"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      th:if="${#fields.hasErrors('name')}"
+                      th:errors="*{name}"
+                    >
+                      Name error
+                    </div>
+                  </div>
+
+                  <!-- Email -->
+                  <div class="mb-3">
+                    <label for="email" class="form-label">
+                      <i class="bi bi-envelope"></i> Email
+                      <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                      id="email"
+                      th:field="*{email}"
+                      placeholder="Enter email address"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}"
+                    >
+                      Email error
+                    </div>
+                  </div>
+
+                  <!-- Major -->
+                  <div class="mb-3">
+                    <label for="major" class="form-label">
+                      <i class="bi bi-book"></i> Major
+                      <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:classappend="${#fields.hasErrors('major')} ? 'is-invalid'"
+                      id="major"
+                      th:field="*{major}"
+                      placeholder="Enter major (e.g., Computer Science)"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      th:if="${#fields.hasErrors('major')}"
+                      th:errors="*{major}"
+                    >
+                      Major error
+                    </div>
+                  </div>
+
+                  <!-- GPA -->
+                  <div class="mb-3">
+                    <label for="gpa" class="form-label">
+                      <i class="bi bi-trophy"></i> GPA
+                      <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.0"
+                      max="4.0"
+                      class="form-control"
+                      th:classappend="${#fields.hasErrors('gpa')} ? 'is-invalid'"
+                      id="gpa"
+                      th:field="*{gpa}"
+                      placeholder="Enter GPA (0.0 - 4.0)"
+                    />
+                    <div
+                      class="invalid-feedback"
+                      th:if="${#fields.hasErrors('gpa')}"
+                      th:errors="*{gpa}"
+                    >
+                      GPA error
+                    </div>
+                    <small class="form-text text-muted"
+                      >GPA must be between 0.0 and 4.0</small
+                    >
+                  </div>
+
+                  <!-- Buttons -->
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a th:href="@{/students}" class="btn btn-secondary">
+                      <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                      <i
+                        th:class="${student.id != null ? 'bi bi-check-circle' : 'bi bi-plus-circle'}"
+                      ></i>
+                      <span
+                        th:text="${student.id != null ? 'Update Student' : 'Create Student'}"
+                        >Create Student</span
+                      >
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Help Text -->
+            <div class="alert alert-info mt-3">
+              <i class="bi bi-info-circle-fill"></i>
+              <strong>Note:</strong> All fields marked with
+              <span class="text-danger">*</span> are required. Email must be
+              unique.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-muted">
+      <div class="container">
+        <p class="mb-0">
+          &copy; 2025 Student Management System. Built with Spring Boot &
+          Thymeleaf.
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Build output
+build/
+target/
+out/
+bin/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Documentation (we keep GUIDE.md in the image)
+# README.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Test results
+test-results/
+.pytest_cache/
