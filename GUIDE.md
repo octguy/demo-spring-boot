@@ -203,7 +203,7 @@ docker rm student-management
 1. **Clone or navigate to the project directory**
 
    ```bash
-   cd /Users/octguy/Personalize/tech/java/project/demo-spring-boot
+   cd /your-directory/demo-spring-boot
    ```
 
 2. **Build the project**
