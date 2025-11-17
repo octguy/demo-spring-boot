@@ -47,7 +47,6 @@ See [GUIDE.md](GUIDE.md) for complete documentation including:
 - Docker deployment guide
 - API endpoints
 - Testing procedures
-- Troubleshooting
 
 ## 🐳 Docker Commands
 
@@ -82,10 +81,6 @@ docker-compose up -d --build
   - JDBC URL: `jdbc:h2:mem:studentdb`
   - Username: `sa`
   - Password: _(empty)_
-
-## 📝 License
-
-Educational/Demo Project
 
 ---
 

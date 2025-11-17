@@ -29,8 +29,8 @@ A comprehensive **Student Management System** built with Spring Boot, featuring 
 | H2 Database        | Latest  | In-Memory Database             |
 | Lombok             | Latest  | Reduce Boilerplate Code        |
 | Jakarta Validation | Latest  | Input Validation               |
-| Gradle             | Latest  | Build Tool                     |
-| Java               | 17/25   | Programming Language           |
+| Gradle             | 9.1.0   | Build Tool                     |
+| Java               | 25      | Programming Language           |
 | Docker             | 20.10+  | Containerization               |
 | Docker Compose     | 2.0+    | Container Orchestration        |
 
@@ -89,8 +89,8 @@ demo-spring-boot/
 
 **Option 1: Local Development**
 
-- Java 17 or higher (Java 25 recommended)
-- Gradle (or use the included Gradle wrapper)
+- Java 25
+- Gradle 9.1.0 (or use the included Gradle wrapper)
 - Any modern web browser
 
 **Option 2: Docker Deployment (Recommended)**
@@ -562,116 +562,6 @@ logging.level.org.springframework.security=DEBUG
 
 ---
 
-## 🏗️ Development Notes
-
-### Design Patterns Used
-
-1. **MVC (Model-View-Controller)**
-
-   - Model: `Student`, `User` entities
-   - View: Thymeleaf templates
-   - Controller: `StudentController`, `HomeController`
-
-2. **Repository Pattern**
-
-   - Spring Data JPA repositories for data access
-
-3. **Service Layer Pattern**
-
-   - Business logic in service classes
-
-4. **POST-REDIRECT-GET (PRG)**
-
-   - After POST operations, redirect to prevent duplicate submissions
-
-5. **Dependency Injection**
-   - Constructor injection with Lombok's `@RequiredArgsConstructor`
-
-### Logging Strategy
-
-- **DEBUG**: Detailed operation logs in service and controller layers
-- **INFO**: Important business events (student created, updated, deleted)
-- **ERROR**: Exception handling and error cases
-
-### Security Considerations
-
-⚠️ **For Development Only**
-
-- Using `NoOpPasswordEncoder` (passwords stored in plain text)
-- H2 Console is enabled
-
-🔒 **For Production**
-
-- Use `BCryptPasswordEncoder` for password hashing
-- Disable H2 Console
-- Use a production database (PostgreSQL, MySQL)
-- Enable HTTPS
-- Configure CSRF properly
-- Add rate limiting
-- Implement proper session management
-
----
-
-## 🐛 Troubleshooting
-
-### Docker Issues
-
-**Issue: Port 8080 already in use**
-
-```bash
-# Find and stop the process using port 8080
-lsof -ti:8080 | xargs kill -9
-
-# Or change the port in docker-compose.yml
-ports:
-  - "8081:8080"  # Maps host port 8081 to container port 8080
-```
-
-**Issue: Container fails to start**
-
-```bash
-# Check container logs
-docker-compose logs student-management-app
-
-# Check container status
-docker-compose ps
-
-# Restart with fresh build
-docker-compose down
-docker-compose up -d --build
-```
-
-**Issue: Out of memory or disk space**
-
-```bash
-# Remove unused Docker resources
-docker system prune -a
-
-# Check Docker disk usage
-docker system df
-```
-
-**Issue: Application not responding**
-
-```bash
-# Check health status
-docker-compose ps
-
-# Check logs for errors
-docker-compose logs --tail=100 student-management-app
-
-# Restart the container
-docker-compose restart student-management-app
-```
-
-**Issue: Changes not reflected after rebuild**
-
-```bash
-# Force rebuild without cache
-docker-compose build --no-cache
-docker-compose up -d
-```
-
 ### Application Issues
 
 **Issue: Application won't start**
@@ -705,110 +595,4 @@ docker-compose up -d
 
 ---
 
-## 📚 Additional Resources
-
-### Spring Boot Documentation
-
-- [Spring Boot Reference](https://docs.spring.io/spring-boot/docs/current/reference/html/)
-- [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
-- [Spring Security](https://docs.spring.io/spring-security/reference/)
-- [Thymeleaf](https://www.thymeleaf.org/documentation.html)
-
-### Bootstrap Documentation
-
-- [Bootstrap 5 Docs](https://getbootstrap.com/docs/5.3/)
-- [Bootstrap Icons](https://icons.getbootstrap.com/)
-
----
-
-## 🎓 Learning Outcomes
-
-By exploring this project, you will learn:
-
-1. **Spring Boot Fundamentals**
-
-   - Application structure and configuration
-   - Dependency injection and component scanning
-   - Auto-configuration
-
-2. **Spring Data JPA**
-
-   - Entity mapping and relationships
-   - Repository pattern and custom queries
-   - Pagination and sorting
-
-3. **Spring Security**
-
-   - Authentication and authorization
-   - Role-based access control
-   - Form login configuration
-
-4. **Thymeleaf**
-
-   - Template engine basics
-   - Form binding and validation
-   - Security integration
-
-5. **Web Development Best Practices**
-
-   - MVC pattern
-   - POST-REDIRECT-GET pattern
-   - Input validation
-   - Error handling
-   - User experience design
-
-6. **Docker & Containerization**
-   - Multi-stage Docker builds
-   - Docker Compose orchestration
-   - Container health checks
-   - Environment-based configuration
-
----
-
-## 🔄 Future Enhancements
-
-Potential improvements for the system:
-
-- [x] Docker containerization
-- [x] Docker Compose configuration
-- [ ] Kubernetes deployment manifests
-- [ ] PostgreSQL/MySQL database support
-- [ ] Redis caching layer
-- [ ] Export students to CSV/Excel
-- [ ] Import students from file
-- [ ] Student profile pictures
-- [ ] Advanced filtering (by major, GPA range)
-- [ ] Student course enrollment
-- [ ] Grade management
-- [ ] Email notifications
-- [ ] REST API endpoints
-- [ ] User registration
-- [ ] Password reset functionality
-- [ ] Audit logging
-- [ ] Dark mode theme
-- [ ] Multi-language support
-
----
-
-## 📄 License
-
-This is a demo project for educational purposes.
-
----
-
-## 👥 Author
-
-Created as a comprehensive Spring Boot demonstration project.
-
----
-
-## 🙏 Acknowledgments
-
-- Spring Framework Team
-- Bootstrap Team
-- Thymeleaf Community
-- All open-source contributors
-
----
-
-**Happy Coding! 🚀**
+**Happy coding! 🚀**
