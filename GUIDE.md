@@ -124,7 +124,7 @@ demo-spring-boot/
    docker-compose logs -f student-management-app
    ```
 
-5. **Stop the application**
+4. **Stop the application**
    ```bash
    docker-compose down
    ```
