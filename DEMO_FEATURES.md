@@ -3,27 +3,29 @@
 ## 🚀 New Features for Class Demo
 
 ### 1. 📊 Interactive Dashboard
+
 **Route:** `/dashboard` (default landing page after login)
 
 **Features:**
+
 - 📈 **Real-time Statistics Cards**
   - Total Students Count
   - Average GPA (color-coded)
   - Performance Distribution (Excellent/Good/Satisfactory)
-  
 - 📉 **Visual Analytics with Chart.js**
   - **GPA Distribution Chart** (Doughnut) - Shows breakdown of students by performance tier
   - **Students by Major Chart** (Bar) - Visualizes student distribution across majors
-  
 - 🏆 **Top 5 Performers**
   - Medal emojis (🥇🥈🥉) for top 3
   - Real-time ranking with GPA scores
   - Quick view of high-achieving students
 
 ### 2. 📥📤 Bulk CSV Import/Export (ADMIN Only)
+
 **Routes:** `/students/import` (POST), `/students/export` (GET)
 
 **CSV Import Features:**
+
 - 📁 Upload CSV file with student data
 - ✅ Automatic validation (name length, email format, GPA range)
 - 🔍 Duplicate detection (emails must be unique)
@@ -31,12 +33,14 @@
 - ✨ Success message with count of imported students
 
 **CSV Export Features:**
+
 - 💾 Download all students as CSV
 - 📅 Filename includes current date
 - 📋 Standard format: ID, Name, Email, Major, GPA
 - 🎯 Perfect for backup or external analysis
 
 **Sample CSV Format:**
+
 ```csv
 Name,Email,Major,GPA
 Alice Cooper,alice.cooper@example.com,Biology,3.8
@@ -44,9 +48,11 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 ```
 
 ### 3. 🔍 Advanced Multi-Filter System
+
 **Route:** `/students` with enhanced filters
 
 **Filter Options:**
+
 - 🔎 **Text Search** - Search by name or email (case-insensitive)
 - 🎓 **Major Filter** - Dropdown populated with all existing majors
 - 📊 **GPA Range** - Min/Max GPA sliders (0.0 - 4.0)
@@ -55,16 +61,19 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 - 🔄 **Clear Filters** - Quick reset to default view
 
 **Smart Pagination:**
+
 - Maintains filter parameters across pages
 - Shows total results count
 - Adjustable page size
 
 ### 4. 🎨 Emoji-Enhanced UI (No Icon Dependencies!)
+
 - ✨ Replaced all Bootstrap Icons with native emojis
 - 🚀 Faster page loads (no CSS icon library needed)
 - 🎯 Better accessibility and universal compatibility
 
 **Emoji Map:**
+
 - 🎓 Graduation cap - Student Management
 - 👥 People - Students list
 - ➕ Plus - Add student
@@ -82,6 +91,7 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 ## 🎭 Demo Flow Suggestions
 
 ### Demo Scenario 1: Dashboard Analytics
+
 1. Login as admin (admin/admin)
 2. View the dashboard with initial 8 sample students
 3. Show GPA distribution chart
@@ -89,6 +99,7 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 5. Highlight top 5 performers with medals
 
 ### Demo Scenario 2: Bulk Operations
+
 1. Navigate to Students list
 2. Export current students to CSV
 3. Show the exported CSV file
@@ -97,6 +108,7 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 6. Show updated dashboard statistics
 
 ### Demo Scenario 3: Advanced Filtering
+
 1. Use text search to find specific student
 2. Filter by major (e.g., "Computer Science")
 3. Set GPA range (e.g., 3.5 - 4.0) to find excellent students
@@ -105,6 +117,7 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 6. Clear all filters to reset
 
 ### Demo Scenario 4: CRUD Operations
+
 1. Create new student (show validation)
 2. Try duplicate email (show error)
 3. Edit student details
@@ -114,18 +127,21 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 ## 📈 Technical Highlights
 
 ### Performance Optimizations
+
 - **Stream API** for efficient filtering
 - **Pagination** to handle large datasets
 - **In-memory H2** for fast demos
 - **Connection pooling** with HikariCP
 
 ### Security Features
+
 - **Role-based access control** (ADMIN/USER)
 - **CSRF protection** enabled
 - **Form-based authentication**
 - **Secured endpoints** for sensitive operations
 
 ### Data Validation
+
 - **Name:** 2-100 characters
 - **Email:** Valid format, unique constraint
 - **GPA:** 0.0-4.0 range with decimal validation
@@ -134,6 +150,7 @@ Bob Dylan,bob.dylan@example.com,Music,3.6
 ## 🐳 Docker Demo
 
 Quick start with Docker:
+
 ```bash
 # Build and run
 docker-compose up --build
@@ -145,12 +162,14 @@ docker-compose up --build
 ## 📝 Sample Data
 
 **Default Users:**
+
 - **Admin:** admin / admin (ROLE_ADMIN) - Full access
 - **User:** user / user (ROLE_USER) - Read-only
 
 **Sample Students:** 8 pre-loaded students across various majors
+
 - Computer Science: 2 students
-- Mathematics: 2 students  
+- Mathematics: 2 students
 - Engineering: 2 students
 - Physics: 1 student
 - Business: 1 student
@@ -201,4 +220,4 @@ docker-compose up --build
 **Application Status:** Running on http://localhost:8080  
 **Default Login:** admin/admin  
 **H2 Console:** http://localhost:8080/h2-console  
-**JDBC URL:** jdbc:h2:mem:studentdb  
+**JDBC URL:** jdbc:h2:mem:studentdb
