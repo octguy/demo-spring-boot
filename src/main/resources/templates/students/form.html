@@ -56,13 +56,14 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/students">
-                <i class="bi bi-list-ul"></i> Students
-              </a>
+              <a class="nav-link" href="/dashboard"> 📊 Dashboard </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/students"> 👥 Students </a>
             </li>
             <li class="nav-item" sec:authorize="hasRole('ADMIN')">
               <a class="nav-link active" href="/students/new">
-                <i class="bi bi-plus-circle"></i> Add Student
+                ➕ Add Student
               </a>
             </li>
           </ul>
