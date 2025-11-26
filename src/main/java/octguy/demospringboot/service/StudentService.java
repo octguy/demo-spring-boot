@@ -2,6 +2,7 @@ package octguy.demospringboot.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import octguy.demospringboot.dto.DashboardStats;
 import octguy.demospringboot.exception.DuplicateEmailException;
 import octguy.demospringboot.exception.StudentNotFoundException;
 import octguy.demospringboot.model.Student;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,8 +96,83 @@ public class StudentService {
         log.info("Student deleted successfully with id: {}", id);
     }
     
-    public List<Student> getAllStudents() {
+    public List<Student> getAllStudentsNoPaging() {
         log.debug("Fetching all students without pagination");
         return studentRepository.findAll();
+    }
+    
+    public DashboardStats getDashboardStats() {
+        log.debug("Generating dashboard statistics");
+        
+        List<Student> allStudents = studentRepository.findAll();
+        
+        long total = allStudents.size();
+        double avgGpa = allStudents.isEmpty() ? 0.0 : 
+            allStudents.stream()
+                .mapToDouble(Student::getGpa)
+                .average()
+                .orElse(0.0);
+        
+        long excellent = allStudents.stream()
+            .filter(s -> s.getGpa() >= 3.5)
+            .count();
+        
+        long good = allStudents.stream()
+            .filter(s -> s.getGpa() >= 3.0 && s.getGpa() < 3.5)
+            .count();
+        
+        long satisfactory = allStudents.stream()
+            .filter(s -> s.getGpa() < 3.0)
+            .count();
+        
+        Map<String, Long> byMajor = allStudents.stream()
+            .collect(Collectors.groupingBy(Student::getMajor, Collectors.counting()));
+        
+        List<Student> topPerformers = allStudents.stream()
+            .sorted((s1, s2) -> Double.compare(s2.getGpa(), s1.getGpa()))
+            .limit(5)
+            .collect(Collectors.toList());
+        
+        return DashboardStats.builder()
+            .totalStudents(total)
+            .averageGpa(avgGpa)
+            .excellentStudents(excellent)
+            .goodStudents(good)
+            .satisfactoryStudents(satisfactory)
+            .studentsByMajor(byMajor)
+            .topPerformers(topPerformers)
+            .build();
+    }
+    
+    public Page<Student> filterStudents(String keyword, String major, Double minGpa, Double maxGpa, int page, int size, String sortBy) {
+        log.debug("Filtering students - keyword: {}, major: {}, minGpa: {}, maxGpa: {}", keyword, major, minGpa, maxGpa);
+        
+        List<Student> filtered = studentRepository.findAll().stream()
+            .filter(s -> keyword == null || keyword.isEmpty() || 
+                    s.getName().toLowerCase().contains(keyword.toLowerCase()) ||
+                    s.getEmail().toLowerCase().contains(keyword.toLowerCase()))
+            .filter(s -> major == null || major.isEmpty() || s.getMajor().equalsIgnoreCase(major))
+            .filter(s -> minGpa == null || s.getGpa() >= minGpa)
+            .filter(s -> maxGpa == null || s.getGpa() <= maxGpa)
+            .collect(Collectors.toList());
+        
+        // Manual pagination
+        int start = page * size;
+        int end = Math.min(start + size, filtered.size());
+        List<Student> pageContent = filtered.subList(start, end);
+        
+        return new org.springframework.data.domain.PageImpl<>(
+            pageContent,
+            PageRequest.of(page, size, Sort.by(sortBy)),
+            filtered.size()
+        );
+    }
+    
+    public List<String> getAllMajors() {
+        return studentRepository.findAll().stream()
+            .map(Student::getMajor)
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
     }
 }

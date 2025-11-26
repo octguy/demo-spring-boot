@@ -1,6 +1,6 @@
 # 🎓 Student Management System
 
-A comprehensive Spring Boot application for managing student records with role-based security, full CRUD operations, and modern UI.
+A comprehensive Spring Boot application for managing student records with role-based security, advanced analytics dashboard, bulk import/export, and modern emoji-enhanced UI.
 
 ## 🚀 Quick Start with Docker
 
@@ -19,7 +19,17 @@ docker-compose up -d
 - Admin: `admin` / `admin` (Full access)
 - User: `user` / `user` (Read-only)
 
-## 📋 Features
+## ✨ New Demo Features
+
+🎯 **Interactive Dashboard** - Real-time statistics, GPA distribution charts, top performers  
+📊 **Data Visualization** - Chart.js integration with doughnut and bar charts  
+📥 **CSV Import/Export** - Bulk student operations with validation  
+🔍 **Advanced Filtering** - Multi-criteria search (keyword, major, GPA range)  
+🎨 **Emoji UI** - Modern interface with zero icon dependencies
+
+👉 See [DEMO_FEATURES.md](DEMO_FEATURES.md) for detailed demo scenarios!
+
+## 📋 Core Features
 
 ✅ Full CRUD operations  
 ✅ Search & pagination  
@@ -34,19 +44,16 @@ docker-compose up -d
 - Spring Boot 3.5.7
 - Spring Security
 - Spring Data JPA
-- Thymeleaf
+- Thymeleaf + Chart.js 4.4.0
 - Bootstrap 5.3.0
+- OpenCSV 5.9
 - H2 Database
 - Docker & Docker Compose
 
 ## 📖 Documentation
 
-See [GUIDE.md](GUIDE.md) for complete documentation including:
-
-- Detailed setup instructions
-- Docker deployment guide
-- API endpoints
-- Testing procedures
+- **[GUIDE.md](GUIDE.md)** - Complete setup and deployment guide
+- **[DEMO_FEATURES.md](DEMO_FEATURES.md)** - New features showcase and demo scenarios
 
 ## 🐳 Docker Commands
 
@@ -77,6 +84,8 @@ docker-compose up -d --build
 ## 📊 Endpoints
 
 - **App**: http://localhost:8080
+- **Dashboard**: http://localhost:8080/dashboard
+- **Students**: http://localhost:8080/students
 - **H2 Console**: http://localhost:8080/h2-console
   - JDBC URL: `jdbc:h2:mem:studentdb`
   - Username: `sa`

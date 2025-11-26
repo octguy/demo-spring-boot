@@ -115,8 +115,19 @@
           class="alert alert-success alert-dismissible fade show"
           role="alert"
         >
-          <i class="bi bi-check-circle-fill"></i>
-          <span th:text="${successMessage}"></span>
+          ✅ <span th:text="${successMessage}"></span>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+          ></button>
+        </div>
+        <div
+          th:if="${errorMessage}"
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          ❌ <span th:text="${errorMessage}"></span>
           <button
             type="button"
             class="btn-close"
@@ -128,7 +139,7 @@
           class="alert alert-danger alert-dismissible fade show"
           role="alert"
         >
-          <i class="bi bi-exclamation-triangle-fill"></i> Student not found.
+          ⚠️ Student not found.
           <button
             type="button"
             class="btn-close"
@@ -138,21 +149,31 @@
 
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h2><i class="bi bi-people-fill"></i> Students</h2>
-          <a
-            th:href="@{/students/new}"
-            class="btn btn-primary"
-            sec:authorize="hasRole('ADMIN')"
-          >
-            <i class="bi bi-plus-circle"></i> Add New Student
-          </a>
+          <h2>👥 Students</h2>
+          <div sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/students/new}" class="btn btn-primary me-2">
+              ➕ Add New Student
+            </a>
+            <button
+              type="button"
+              class="btn btn-success me-2"
+              data-bs-toggle="modal"
+              data-bs-target="#importModal"
+            >
+              📥 Import CSV
+            </button>
+            <a th:href="@{/students/export}" class="btn btn-info">
+              📤 Export CSV
+            </a>
+          </div>
         </div>
 
-        <!-- Search Form -->
+        <!-- Search and Filter Form -->
         <div class="card mb-4">
           <div class="card-body">
             <form th:action="@{/students}" method="get" class="row g-3">
-              <div class="col-md-8">
+              <div class="col-md-4">
+                <label class="form-label">🔍 Search</label>
                 <input
                   type="text"
                   name="keyword"
@@ -162,24 +183,70 @@
                 />
               </div>
               <div class="col-md-2">
-                <select name="sortBy" class="form-select" th:value="${sortBy}">
-                  <option value="id" th:selected="${sortBy == 'id'}">
-                    Sort by ID
-                  </option>
-                  <option value="name" th:selected="${sortBy == 'name'}">
-                    Sort by Name
-                  </option>
-                  <option value="email" th:selected="${sortBy == 'email'}">
-                    Sort by Email
-                  </option>
-                  <option value="gpa" th:selected="${sortBy == 'gpa'}">
-                    Sort by GPA
-                  </option>
+                <label class="form-label">🎓 Major</label>
+                <select name="major" class="form-select">
+                  <option value="">All Majors</option>
+                  <option
+                    th:each="major : ${allMajors}"
+                    th:value="${major}"
+                    th:text="${major}"
+                    th:selected="${selectedMajor == major}"
+                  ></option>
                 </select>
               </div>
               <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">
-                  <i class="bi bi-search"></i> Search
+                <label class="form-label">📊 Min GPA</label>
+                <input
+                  type="number"
+                  name="minGpa"
+                  class="form-control"
+                  placeholder="0.0"
+                  step="0.1"
+                  min="0"
+                  max="4"
+                  th:value="${minGpa}"
+                />
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">📊 Max GPA</label>
+                <input
+                  type="number"
+                  name="maxGpa"
+                  class="form-control"
+                  placeholder="4.0"
+                  step="0.1"
+                  min="0"
+                  max="4"
+                  th:value="${maxGpa}"
+                />
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">🔀 Sort By</label>
+                <select name="sortBy" class="form-select" th:value="${sortBy}">
+                  <option value="id" th:selected="${sortBy == 'id'}">
+                    ID
+                  </option>
+                  <option value="name" th:selected="${sortBy == 'name'}">
+                    Name
+                  </option>
+                  <option value="email" th:selected="${sortBy == 'email'}">
+                    Email
+                  </option>
+                  <option value="gpa" th:selected="${sortBy == 'gpa'}">
+                    GPA
+                  </option>
+                  <option value="major" th:selected="${sortBy == 'major'}">
+                    Major
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary me-2">
+                  🔍 Search & Filter
+                </button>
+                <a th:href="@{/students}" class="btn btn-secondary">
+                  🔄 Clear Filters
+                </a>
                 </button>
               </div>
             </form>
@@ -281,7 +348,7 @@
                 >
                   <a
                     class="page-link"
-                    th:href="@{/students(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, keyword=${keyword})}"
+                    th:href="@{/students(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, keyword=${keyword}, major=${selectedMajor}, minGpa=${minGpa}, maxGpa=${maxGpa})}"
                   >
                     Previous
                   </a>
@@ -293,7 +360,7 @@
                 >
                   <a
                     class="page-link"
-                    th:href="@{/students(page=${i}, size=${size}, sortBy=${sortBy}, keyword=${keyword})}"
+                    th:href="@{/students(page=${i}, size=${size}, sortBy=${sortBy}, keyword=${keyword}, major=${selectedMajor}, minGpa=${minGpa}, maxGpa=${maxGpa})}"
                     th:text="${i + 1}"
                     >1</a
                   >
@@ -304,7 +371,7 @@
                 >
                   <a
                     class="page-link"
-                    th:href="@{/students(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, keyword=${keyword})}"
+                    th:href="@{/students(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, keyword=${keyword}, major=${selectedMajor}, minGpa=${minGpa}, maxGpa=${maxGpa})}"
                   >
                     Next
                   </a>
@@ -312,6 +379,55 @@
               </ul>
             </nav>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div
+      class="modal fade"
+      id="importModal"
+      tabindex="-1"
+      aria-labelledby="importModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="importModalLabel">📥 Import Students from CSV</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form th:action="@{/students/import}" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+              <div class="alert alert-info" role="alert">
+                <strong>ℹ️ CSV Format:</strong> The CSV file should have the following columns:<br />
+                <code>Name, Email, Major, GPA</code><br />
+                <small>Example: John Doe, john@example.com, Computer Science, 3.75</small>
+              </div>
+              <div class="mb-3">
+                <label for="csvFile" class="form-label">Select CSV File</label>
+                <input
+                  class="form-control"
+                  type="file"
+                  id="csvFile"
+                  name="file"
+                  accept=".csv"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-success">📥 Import</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

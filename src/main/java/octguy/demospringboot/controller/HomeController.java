@@ -16,7 +16,7 @@ public class HomeController {
     public String home(Authentication authentication, Model model) {
         log.debug("Home page accessed by user: {}", authentication.getName());
         model.addAttribute("username", authentication.getName());
-        return "redirect:/students";
+        return "redirect:/dashboard";
     }
     
     @GetMapping("/login")

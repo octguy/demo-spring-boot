@@ -28,15 +28,15 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/", "/home").authenticated()
-                .requestMatchers("/students/new", "/students/edit/**", "/students/delete/**").hasRole("ADMIN")
+                .requestMatchers("/", "/home", "/dashboard").authenticated()
+                .requestMatchers("/students/new", "/students/edit/**", "/students/delete/**", "/students/import", "/students/export").hasRole("ADMIN")
                 .requestMatchers("/students/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/students", true)
+                .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
